@@ -23,13 +23,13 @@
 </head>
 <body>
 
-	<div class="container">
+	<div class="container" id="itembook">
+		<br>
 		<div class="row">
-			<div class="row" style="margin-top: 20px;">
 
-				<div class="col-xs-offset-1 col-xs-11">
-					<ul class="nav nav-pills">
-						<li role="presentation btn-xs" id="index"><a href="#">我的书架</a></li>
+				<div class=" col-xs-12" style="text-align: center">
+					<ul class="nav nav-pills" style="background-color:gainsboro;font-size: 15px">
+						<li role="presentation btn-xs" id="index"><a href="#">书架</a></li>
 						<li role="presentation" class="active"><a
 							href="${baseUrl }view/recommendNovel.jsp">推荐</a></li>
 						<li role="presentation"><a
@@ -37,18 +37,20 @@
 						<li role="presentation" ><a href="${baseUrl }view/novels.jsp">搜索</a></li>
 					</ul>
 				</div>
-				<br>
-			</div>
-			<div class="row">
-
-				<div id="itembook" class="row" style="overflow: hiden;"></div>
 
 			</div>
+		<br>
+	<%--	<div class="row">
 
-		</div>
+				&lt;%&ndash;<div  style="overflow: hiden;"></div>&ndash;%&gt;
+
+		</div>--%>
 
 	</div>
 </body>
+</html>
+
+
 
 <script type="text/javascript">
 //页面加载后开始
@@ -66,10 +68,8 @@ $(document).ready(function(){
 	 //总记录数
 	 var pageNums = 0;
 	getRecommendNovels(0,3);//第一次加载8条记录
-	
-	
-	
-	
+
+
 	
 	//读取推荐榜
 	function getRecommendNovels(start,end){
@@ -140,7 +140,7 @@ $(document).ready(function(){
 			var auth = $("<p></p>").append('作者:    '+novel.auth);
 			var type = $("<p></p>").append('类型 :    '+novel.type);
 			var state = $("<p></p>").append('状态:    '+novel.state);
-			var div = $("<div></div>").addClass("col-xs-7")
+			var div = $("<div></div>").addClass("col-xs-6")
 			.append(title)
 			.append(auth)
 			.append(type)
@@ -231,4 +231,3 @@ $(document).ready(function(){
 	
 });
 </script>
-</html>

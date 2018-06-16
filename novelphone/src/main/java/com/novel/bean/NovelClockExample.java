@@ -166,72 +166,72 @@ public class NovelClockExample {
         }
 
         public Criteria andChapterurlIsNull() {
-            addCriterion("chapterUrl is null");
+            addCriterion("chapterurl is null");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlIsNotNull() {
-            addCriterion("chapterUrl is not null");
+            addCriterion("chapterurl is not null");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlEqualTo(String value) {
-            addCriterion("chapterUrl =", value, "chapterurl");
+            addCriterion("chapterurl =", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlNotEqualTo(String value) {
-            addCriterion("chapterUrl <>", value, "chapterurl");
+            addCriterion("chapterurl <>", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlGreaterThan(String value) {
-            addCriterion("chapterUrl >", value, "chapterurl");
+            addCriterion("chapterurl >", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlGreaterThanOrEqualTo(String value) {
-            addCriterion("chapterUrl >=", value, "chapterurl");
+            addCriterion("chapterurl >=", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlLessThan(String value) {
-            addCriterion("chapterUrl <", value, "chapterurl");
+            addCriterion("chapterurl <", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlLessThanOrEqualTo(String value) {
-            addCriterion("chapterUrl <=", value, "chapterurl");
+            addCriterion("chapterurl <=", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlLike(String value) {
-            addCriterion("chapterUrl like", value, "chapterurl");
+            addCriterion("chapterurl like", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlNotLike(String value) {
-            addCriterion("chapterUrl not like", value, "chapterurl");
+            addCriterion("chapterurl not like", value, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlIn(List<String> values) {
-            addCriterion("chapterUrl in", values, "chapterurl");
+            addCriterion("chapterurl in", values, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlNotIn(List<String> values) {
-            addCriterion("chapterUrl not in", values, "chapterurl");
+            addCriterion("chapterurl not in", values, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlBetween(String value1, String value2) {
-            addCriterion("chapterUrl between", value1, value2, "chapterurl");
+            addCriterion("chapterurl between", value1, value2, "chapterurl");
             return (Criteria) this;
         }
 
         public Criteria andChapterurlNotBetween(String value1, String value2) {
-            addCriterion("chapterUrl not between", value1, value2, "chapterurl");
+            addCriterion("chapterurl not between", value1, value2, "chapterurl");
             return (Criteria) this;
         }
 
@@ -552,6 +552,66 @@ public class NovelClockExample {
 
         public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
             addCriterion("updatetime not between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumIsNull() {
+            addCriterion("num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumIsNotNull() {
+            addCriterion("num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumEqualTo(Integer value) {
+            addCriterion("num =", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumNotEqualTo(Integer value) {
+            addCriterion("num <>", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumGreaterThan(Integer value) {
+            addCriterion("num >", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("num >=", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumLessThan(Integer value) {
+            addCriterion("num <", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumLessThanOrEqualTo(Integer value) {
+            addCriterion("num <=", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumIn(List<Integer> values) {
+            addCriterion("num in", values, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumNotIn(List<Integer> values) {
+            addCriterion("num not in", values, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumBetween(Integer value1, Integer value2) {
+            addCriterion("num between", value1, value2, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("num not between", value1, value2, "num");
             return (Criteria) this;
         }
     }

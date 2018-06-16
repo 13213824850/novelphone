@@ -17,6 +17,8 @@ public class NovelClock {
 
     private Date updatetime;
 
+    private Integer num;
+
     public Integer getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class NovelClock {
 
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
     }
 }

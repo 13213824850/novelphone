@@ -2,9 +2,12 @@ package com.novel.intercepetor;
 
 import com.alibaba.fastjson.JSON;
 import com.novel.annotation.SameUrlData;
+import com.novel.redis.RedisClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SameUrlDataInterceptor extends HandlerInterceptorAdapter{
+    @Autowired
+    private RedisClient redisClient;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {
@@ -42,10 +47,12 @@ public class SameUrlDataInterceptor extends HandlerInterceptorAdapter{
         map.put(url, params);
         String nowUrlParams=map.toString();//
 
-        Object preUrlParams=httpServletRequest.getSession().getAttribute("repeatData");
+        Object preUrlParams=redisClient.get("repeatData");
         if(preUrlParams==null)//如果上一个数据为null,表示还没有访问页面
         {
-            httpServletRequest.getSession().setAttribute("repeatData", nowUrlParams);
+            redisClient.set("repeatData",nowUrlParams);
+            //过期时间3秒 防止表单重复提交
+            redisClient.expire("repeatData",2);
             return false;
         }
         else//否则，已经访问过页面

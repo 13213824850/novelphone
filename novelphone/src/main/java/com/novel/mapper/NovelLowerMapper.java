@@ -4,6 +4,7 @@ import com.novel.bean.NovelLower;
 import com.novel.bean.NovelLowerExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 public interface NovelLowerMapper {
     long countByExample(NovelLowerExample example);
@@ -27,4 +28,5 @@ public interface NovelLowerMapper {
     int updateByPrimaryKeySelective(NovelLower record);
 
     int updateByPrimaryKey(NovelLower record);
+
 }

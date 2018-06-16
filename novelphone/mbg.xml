@@ -38,22 +38,23 @@
 		
 		
 		<!-- table指定每个表的生成策略 -->
-		
+
+
+
 		<!--
         <table tableName="message" domainObjectName="Message"></table>
 		<table tableName="feedback" domainObjectName="Feedback"></table>
-	
+
 	 	<table tableName="user" domainObjectName="User"></table>
 	 		<table tableName="report" domainObjectName="Report"></table>
-        <table tableName="readRecord" domainObjectName="ReadRecord"></table>  
+        <table tableName="readRecord" domainObjectName="ReadRecord"></table>
         <table tableName="novellower" domainObjectName="NovelLower"></table>
         <table tableName="novel" domainObjectName="Novel"></table>
 		 <table tableName="chapter" domainObjectName="Chapter"></table>
-		<table tableName="content" domainObjectName="Content"></table>  
-	 		<table tableName="novelclock" domainObjectName="NovelClock"></table>
-		 -->
+		<table tableName="content" domainObjectName="Content"></table>
 	 		<table tableName="novelstate" domainObjectName="NovelState"></table>
 
-	 	
+		 -->
+		<table tableName="novelclock" domainObjectName="NovelClock"></table>
 	</context>
 </generatorConfiguration>

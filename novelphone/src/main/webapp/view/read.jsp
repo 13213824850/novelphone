@@ -32,6 +32,7 @@
 <body style="background-color: #EEEEEE;" >
 
 	<div data-role="page" id="pageone">
+		<a href="" id="contentSource" style="font-size: 10px;color: black;">原网页</a>
 		<div id="chapter" data-role="header"></div>
 		<!-- 章节 -->
 		<div id="contenttext" data-role="content" style="font-size: 20px;display:block;line-height: 25px;">
@@ -80,7 +81,7 @@
 			var page = $("#page").height();
 			//判断每行显示的字数 可以显示多少行
 			var fontlinecountt = Math.floor(scranwidth/contentFontSize);
-			var fontrowcount =  Math.floor((scranheight-pageoneheight-page)/25)-1;
+			var fontrowcount =  Math.floor((scranheight-pageoneheight-page)/25)-2;
 			console.log(fontlinecountt+"  "+fontrowcount);
 			console.log(scranheight+"  "+scranwidth);
 			console.log(scranheight+" "+pageoneheight+" "+ page+"  "+fontrowcount);
@@ -264,7 +265,7 @@
 					
 					//定位导航栏目
 				$('#showfooter').show(500);
-				var clientx = (scranheight*0.75+'').trim();
+				var clientx = (scranheight*0.8+'').trim();
 				$('#showfooter').css({
 					'position':'absolute',
 					'left':'0px',
@@ -412,6 +413,12 @@
 				}
 					$.cookie('footprint',novelids.substring(0,novelids.length-1), { expires: 30, path: '/' })
 			}
+
+
+
+			$("#contentsource").click(function () {
+				window.open("http://www.biquge.com.tw/","_self");
+            });
 	
 		});
 		

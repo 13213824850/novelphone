@@ -4,7 +4,6 @@ import com.novel.bean.NovelClock;
 import com.novel.bean.NovelClockExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
 
 public interface NovelClockMapper {
     long countByExample(NovelClockExample example);
@@ -28,6 +27,4 @@ public interface NovelClockMapper {
     int updateByPrimaryKeySelective(NovelClock record);
 
     int updateByPrimaryKey(NovelClock record);
-    @Update("update novelclock set clockstate = 0  ")
-    int updatenNovelClockState();
 }

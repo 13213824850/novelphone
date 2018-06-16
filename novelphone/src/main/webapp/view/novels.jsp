@@ -30,7 +30,7 @@
 	
 		<div class="row">
 			<div style="float: right" id="searchNovel" class="col-xs-12">
-		
+				<a id="index" href="#">返回书架</a>&nbsp;&nbsp;
 				<input type="text" name="novelName" id="novelName"
 					placeholder="作者、小说名"  /> <span id="getNovels"
 					class="glyphicon glyphicon-search btn-lg"></span>
@@ -89,7 +89,14 @@
 	<input type="hidden" value="${novelName==nul?0:novelName }" id="novelNamemsg"/>
 	<script type="text/javascript">
 		var baseUrl = "${baseUrl }";
-		if($("#novelNamemsg").val()!=0){
+
+        $("#index").click(function(){
+            var userid = user.id;
+            var url = baseUrl + "novel/getReadRecord.html?userid="+userid;
+            window.open(url,'_self');
+        });
+
+        if($("#novelNamemsg").val()!=0){
 			$("#novelName").attr('placeholder',$("#novelNamemsg").val());
 			$("#novelName").attr('value',$("#novelNamemsg").val());
 		}
@@ -110,10 +117,14 @@
 			getNovels(0);
 		});
 		//点击书籍添加
+		var clicktime = 0; //点击事件防止表单重复提交
 		$(".itemBook").click(function() {
 			var data = $(this).next().serialize();
 			var type = $(this).children().val();
-			addUserBook(data, type);
+            setTimeout("clicktime=0",3);
+			if(clicktime<3){
+                addUserBook(data, type);
+            }
 		});
 
 		/*
@@ -130,7 +141,7 @@
 		}
 
 		function addUserBook(data, type) {
-
+          clicktime = 3;
 			//判断是否登录 
 			if (user == null) {
 				if (!confirm("请登录后方可查看")) {
@@ -142,7 +153,9 @@
 			var productid = user.id;
 			var url = baseUrl + "novel/addNovel.html?productid=" + productid+ "&&product=" + product + "&&" + data + "&&searchtype=" + type;
 
-			window.open(url,"_self");
+			window.open(url,"_self",function (e) {
+                    clicktime = 0;
+            });
 				/*$.ajax({
 				url:url,
 				data:"productid=" + productid+ "&&product=" + product + "&&" + data + "&&searchtype=" + type,

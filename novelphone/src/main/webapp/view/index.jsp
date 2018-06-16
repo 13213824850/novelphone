@@ -48,6 +48,7 @@ font-weight: bold;
 <body>
 
 	<div class="container " id="body">
+		<div style="text-align: center;color: black;"><a href="#">公告：本软件仅供交流使用</a></div>
 		<!-- 搜索框 -->
 		<div style="float: right" id="searchNovel" hidden="hidden"
 			class="col-xs-12">
@@ -68,7 +69,8 @@ font-weight: bold;
 					<br>
 				</div>
 			</div>
-			<ul class="nav nav-pills">
+
+			<ul class="nav nav-pills" style="background-color:gainsboro;font-size: 15px">
 				<li role="presentation btn-xs" class="active"><a href="#">我的书架</a></li>
 					<li role="presentation" ><a href="${baseUrl }view/recommendNovel.jsp">推荐</a></li>
 					<li role="presentation" ><a href="${baseUrl }view/sortnovels.jsp">分类</a></li>

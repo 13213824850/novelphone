@@ -1,10 +1,12 @@
 package com.novel.service.implnotrain;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.sun.prism.impl.Disposer;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -261,14 +263,7 @@ public class PNovelServiceimpl implements PNovelService {
 
 			// 优化body
 			String bodyold = contenttext.toString();
-			String[] bodysplit = bodyold.split("<br>");
-			String body = "";
-			for (String string : bodysplit) {
-				if (string.contains("&nbsp;&nbsp;&nbsp;&nbsp") && !string.contains("<p")) {
-					string = string.replace("&nbsp;", "");
-					body = body.trim() + string.trim() + "<br>";
-				}
-			}
+		    String body = changerBody(bodyold);
 
 			String chaptertext = chapter.getChaptertext();
 			if (pre.contains("/")) {
@@ -283,13 +278,14 @@ public class PNovelServiceimpl implements PNovelService {
 
 			if (next.contains("/")) {
 				Novel record = novelMapper.selectByPrimaryKey(novelid);
-
-
+				record = GetNovelState(record);
+				System.out.println(record.getState());
 				if (novelstate.equals(record.getState())) {
 					NovelClock novelClock = new NovelClock();
 					novelClock.setId(record.getId());
 					novelClock.setChapterurl(chapter.getSource());
 					novelClock.setClockstate(0);
+					novelClock.setNum(chapter.getNum());
 					novelClock.setCreatetime(new Date());
 					novelClock.setUpdatetime(new Date());
 					novelClock.setState(record.getState());
@@ -313,10 +309,6 @@ public class PNovelServiceimpl implements PNovelService {
 				e.printStackTrace();
 			}
 
-		
-				
-			
-			
 		}
 
 		// 开始加重未完成的章节
@@ -332,6 +324,27 @@ public class PNovelServiceimpl implements PNovelService {
 
 		}
 		againGetChapter.isEmpty();
+	}
+
+	public static String changerBody(String bodyold){
+		String[] bodysplit = bodyold.split("<br>");
+		String body = "";
+		/*	for (String string : bodysplit) {
+				if (string.contains("&nbsp;&nbsp;&nbsp;&nbsp") && !string.contains("<p")) {
+
+					string = string.replace("&nbsp;", "");
+					body = body.trim() + string.trim() + "<br>";
+				}
+
+			}*/
+		//0除外只要偶数
+		for (int i = 2; i <bodysplit.length ; i++) {
+			if(i%2==0){
+				String string = bodysplit[i].replace("&nbsp;", "");
+				body = body.trim() + string.trim() + "<br>";
+			}
+		}
+		return body;
 	}
 
 	@Override
@@ -379,7 +392,12 @@ public class PNovelServiceimpl implements PNovelService {
 
 	@Override
 	public Novel GetNovelState(Novel novel) {
-		String html = getHtml(novel.getTitleurl()).toString();
+		String url = novel.getTitleurl();
+		String[] urlSplit = url.split("/");
+		String bookId = urlSplit[urlSplit.length-1].split("\\.")[0];
+		url = contentUrl+"/book/"+bookId+"/";
+		//System.out.println(url);
+		String html = getHtml(url).toString();
 		Document doc = Jsoup.parse(html);
 		Elements select = doc.select(".synopsisArea_detail");
 		if(select.size()==0){
@@ -394,6 +412,7 @@ public class PNovelServiceimpl implements PNovelService {
 					return novel;
 				}
 				if(!split[1].equals(novel.getState())) {
+					novel.setState(split[1]);
 					novelMapper.updateByPrimaryKeySelective(novel);
 				}
 			}
@@ -406,7 +425,7 @@ public class PNovelServiceimpl implements PNovelService {
 	 * 30分钟执行一次任务
 	 * 
 	 */
-	@Scheduled(cron = "0 0 * * * ? ")
+	@Scheduled(cron = "0 0 0/1 * * ? ")
 	@Override
 	public Msg clockNovelUpdate() {
 		// 第一步查询小说
@@ -417,7 +436,7 @@ public class PNovelServiceimpl implements PNovelService {
 	}
 
 	// 3小时任务
-	@Scheduled(cron = "0 0 */3 * * ? ")
+	@Scheduled(cron = "0 0 0/3 * * ? ")
 	@Override
 	public Msg clockNovelUpdate3() {
 		System.out.println(new Date().toString()+"3");
@@ -426,7 +445,7 @@ public class PNovelServiceimpl implements PNovelService {
 	}
 
 	// 6小时任务
-	@Scheduled(cron = "0 0 */6 * * ? ")
+	@Scheduled(cron = "0 0 0/6 * * ? ")
 	@Override
 	public Msg clockNovelUpdate6() {
 		System.out.println(new Date().toString()+"6");
@@ -435,7 +454,7 @@ public class PNovelServiceimpl implements PNovelService {
 	}
 
 	// 13.5小时任务
-	@Scheduled(cron = "0 0 */12 * * ? ")
+	@Scheduled(cron = "0 0 0/12 * * ? ")
 	@Override
 	public Msg clockNovelUpdate13() {
 		System.out.println(new Date().toString()+"13");
@@ -443,13 +462,16 @@ public class PNovelServiceimpl implements PNovelService {
 		return null;
 	}
 
-	@Scheduled(cron = " 0 0 */23 ? * * ")
+	@Scheduled(cron = " 0 0 0/23 ? * * ")
 	// 每tian三小时执行一次将小说更新状态初始化为0变为30分钟查一次
 	@Override
 	public Msg clockNovelUpdateState() {
 		System.out.println(new Date().toString()+"3点");
 		// 1重置更新时间
-		novelClockMapper.updatenNovelClockState();
+		NovelClockExample example = new NovelClockExample();
+		NovelClock novelClock = new NovelClock();
+		novelClock.setClockstate(0);
+		novelClockMapper.updateByExample(novelClock,example);
 		// 2根据小说id查询小说是否为
 		return null;
 	}
@@ -491,6 +513,7 @@ public class PNovelServiceimpl implements PNovelService {
 			NovelClockExample.Criteria criteria = example.createCriteria();
 			criteria.andClockstateEqualTo(state);// 查询出30分钟更新的小说
 			List<NovelClock> novelclocks = novelClockMapper.selectByExample(example);
+
 			// 2根据最新章节 原地址开始解析
 			for (NovelClock novelClock : novelclocks) {
 				isUpdate(novelClock, state);
@@ -507,17 +530,23 @@ public class PNovelServiceimpl implements PNovelService {
 		String next = doc.select("#pt_next").attr("href");
 
 		if (!next.contains("/")) {
-			getNewChapters(novelClock, next, state);
+			// 将其放入3小时更新队列
+			novelClock.setClockstate(state+1);
+			novelClockMapper.updateByPrimaryKeySelective(novelClock);
+			getNewChapters(novelClock, next);
 		}
 
 	}
 
-	public boolean getNewChapters(NovelClock novelClock, String nextUrl, int state) {
-		int contentid = Integer.parseInt(nextUrl.split("\\.")[0]);
-		String url = contentUrl + "/" + novelClock.getId() + "/" + nextUrl;
+	public boolean getNewChapters(NovelClock novelClock, String nextUrl) {
+
+		String idString = nextUrl.split("\\.")[0];
+        int contentid = Integer.parseInt(idString);
+		String[] urlSplit = novelClock.getTitleurl().split("/");
+		String bookId = urlSplit[urlSplit.length-1].split("\\.")[0];
+		String url = contentUrl+"/book/"+bookId+"/"+nextUrl;
 		String html = getHtml(url).toString();
 		Document doc = Jsoup.parse(html);
-		System.out.println(doc);
 		Elements contenttext = doc.select("#chaptercontent");
 		String pre = doc.select("#pt_prev").attr("href");
 		String next = doc.select("#pt_next").attr("href");
@@ -527,31 +556,31 @@ public class PNovelServiceimpl implements PNovelService {
 		String title = doc.select(".title").text();
 
 		String bodyold = contenttext.toString();
-		String[] bodysplit = bodyold.split("<br>");
-		String body = "";
-		for (String string : bodysplit) {
-			if (string.contains("&nbsp;&nbsp;&nbsp;&nbsp") && !string.contains("<p")) {
-				string = string.replace("&nbsp;", "");
-				body = body.trim() + string.trim() + "<br>";
-			}
-		}
-
+		String body = changerBody(bodyold);
+        int nextid = 0;
 		if (!next.contains("/")) {
-
+			nextid = Integer.parseInt(next.split("\\.")[0]);
+		}
 			int preid = Integer.parseInt(pre.split("\\.")[0]);
-			int nextid = Integer.parseInt(next.split("\\.")[0]);
 			Content content = new Content(title, preid, nextid, 0, body);
+			content.setId(contentid);
+			content.setNovelid(novelClock.getId());
+			content.setNum(novelClock.getNum()+1);
 			contentMapper.insert(content);
 			Chapter chapter = new Chapter();
 			chapter.setContentid(content.getId());
+			chapter.setNum(novelClock.getNum()+1);
 			chapter.setChaptertext(title);
 			chapter.setNovelid(novelClock.getId());
 			chapter.setSource(url);
 			chapterMapper.insert(chapter);
+			novelClock.setNum(novelClock.getNum()+1);
 			// 判断是否还有下一张
 			if (!next.contains("/")) {
-				getNewChapters(novelClock, next, state);
+				getNewChapters(novelClock, next);
 			} else {
+				novelClock.setChapterurl(contentUrl+"/"+bookId+"/"+nextUrl);
+				novelClockMapper.updateByPrimaryKeySelective(novelClock);
 				Novel novel = new Novel();
 				novel.setId(novelClock.getId());
 				novel.setNewchapterurl(contentid);
@@ -566,13 +595,8 @@ public class PNovelServiceimpl implements PNovelService {
 				criteria.andNovelidEqualTo(novel.getId());
 				readRecordMapper.updateByExampleSelective(readRecord, example);
 
-				// 将其放入3小时更新队列
-				novelClock.setClockstate(1);
-				novelClock.setClockstate(state + 1);
-				novelClockMapper.updateByPrimaryKeySelective(novelClock);
-
 			}
-		}
+
 		return true;
 	}
 
